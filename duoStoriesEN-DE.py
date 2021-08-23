@@ -54,24 +54,54 @@ def load_story(browser_drv, delay_time, story_link, story_name):
         print("Loading took too much time!")
 
 
-def two_options_click(brw_driver, btn_xpath, btn_text, text_loc):
-    xpath_one = btn_xpath + '1]/button'
-    xpath_two = btn_xpath + '2]/button'
-    text_loc_one = text_loc + '1]/div/div/span[1]'
-    text_loc_two = text_loc + '2]/div/div/span[1]'
+def two_options_click( btn_xpath, btn_text, text_loc):
+    global driver
+    global delay
+    str(btn_xpath)
+    str(btn_text)
+    str(text_loc)
+    try:
+        xpath_one = btn_xpath + '1]/button'
+        xpath_two = btn_xpath + '2]/button'
+        text_loc_one = text_loc + '1]/div/div/span[1]'
+        text_loc_two = text_loc + '2]/div/div/span[1]'
 
-    First_option = brw_driver.find_element_by_xpath(text_loc_one)
-    Second_option = brw_driver.find_element_by_xpath(text_loc_two)
+        First_option = driver.find_element_by_xpath(text_loc_one)
+        Second_option = driver.find_element_by_xpath(text_loc_two)
 
-    if First_option.text == btn_text:
-        option_one = brw_driver.find_elements_by_xpath(xpath_one)[0]
-        option_one.click()
-    elif Second_option.text == btn_text:
-        option_two = brw_driver.find_elements_by_xpath(xpath_two)[0]
-        option_two.click()
+        if First_option.text == btn_text:
+            option_one = driver.find_elements_by_xpath(xpath_one)[0]
+            option_one.click()
+        elif Second_option.text == btn_text:
+            option_two = driver.find_elements_by_xpath(xpath_two)[0]
+            option_two.click()
+    except (NoSuchElementException, StaleElementReferenceException, TimeoutException):
+        pass
+
+def three_options_click(btn_text, location_xpath, relative_xpath):
+    global driver
+    global delay
+    str(location_xpath)
+    str(relative_xpath)
+    str(btn_text)
+    try:
+        myElem = WebDriverWait(driver, delay).until(EC.element_to_be_clickable(
+            (By.XPATH, location_xpath + '3]/button')))
+
+        First_option = driver.find_element_by_xpath(location_xpath + "1" + relative_xpath)
+        Second_option = driver.find_element_by_xpath(location_xpath + "2" + relative_xpath)
+        Third_option = driver.find_element_by_xpath(location_xpath + "3" + relative_xpath)
+
+        if First_option.text == btn_text:
+            driver.find_elements_by_xpath(location_xpath + "1]/button")[0].click()
+        elif Second_option.text == btn_text:
+            driver.find_elements_by_xpath(location_xpath + "2]/button")[0].click()
+        elif Third_option.text == btn_text:
+            driver.find_elements_by_xpath(location_xpath + "3]/button")[0].click()
+    except (NoSuchElementException, StaleElementReferenceException, TimeoutException):
+        pass
 
 def clicktext(buttonloc, *args, **kwargs):
-
     myElem = WebDriverWait(driver, delay).until(EC.element_to_be_clickable(
             (By.XPATH, str(buttonloc) + "span[1]")))
     for arg in args:
@@ -499,26 +529,8 @@ def story_good_morning():
     click_continue(driver, delay)
 
     # anna wants to know
-    try:
-        First_option = driver.find_elements_by_xpath(
-            "//*[@id='root']/div[1]/div/div/div/div[1]/div[1]/div[7]/div/ul/li[1]/div/div/*[text()='where']")
-        Second_option = driver.find_elements_by_xpath(
-            "//*[@id='root']/div[1]/div/div/div/div[1]/div[1]/div[7]/div/ul/li[2]/div/div/*[text()='where']")
-        Third_option = driver.find_elements_by_xpath(
-            "//*[@id='root']/div[1]/div/div/div/div[1]/div[1]/div[7]/div/ul/li[3]/div/div/*[text()='where']")
-
-        if First_option:
-            driver.find_elements_by_xpath(
-                "//*[@id='root']/div[1]/div/div/div/div[1]/div[1]/div[7]/div/ul/li[1]/button")[0].click()
-        elif Second_option:
-            driver.find_elements_by_xpath(
-                "//*[@id='root']/div[1]/div/div/div/div[1]/div[1]/div[7]/div/ul/li[2]/button")[0].click()
-        elif Third_option:
-            driver.find_elements_by_xpath(
-                "//*[@id='root']/div[1]/div/div/div/div[1]/div[1]/div[7]/div/ul/li[3]/button")[0].click()
-    except (NoSuchElementException, StaleElementReferenceException, TimeoutException):
-        pass
-
+    two_options_click("//*[@id='root']/div[1]/div/div/div/div[1]/div[1]/div[7]/div/ul/li[", 'where', ']/div/div/*')
+    
     # Continue
     click_continue(driver, delay)
 
@@ -545,28 +557,7 @@ def story_good_morning():
 
     click_continue(driver, delay)
 
-    try:
-        myElem = WebDriverWait(driver, delay).until(EC.element_to_be_clickable(
-            (By.XPATH, "//*[@id='root']/div[1]/div/div/div/div[1]/div[1]/div[15]/div/ul/li[3]/button")))
-
-        First_option = driver.find_elements_by_xpath(
-            "//*[@id='root']/div/div/div/div/div[1]/div[1]/div[15]/div/ul/li[1]/div/div/span[6][@class='_2igzU _3LUrt _2P5W7'][contains(text(),'coffee')]")  # [contains(text(),'coffee')]
-        Second_option = driver.find_elements_by_xpath(
-            "//*[@id='root']/div/div/div/div/div[1]/div[1]/div[15]/div/ul/li[2]/div/div/span[6][@class='_2igzU _3LUrt _2P5W7'][contains(text(),'coffee')]")
-        Third_option = driver.find_elements_by_xpath(
-            "//*[@id='root']/div/div/div/div/div[1]/div[1]/div[15]/div/ul/li[3]/div/div/span[6][@class='_2igzU _3LUrt _2P5W7'][contains(text(),'coffee')]")
-
-        if First_option:
-            driver.find_elements_by_xpath(
-                "//*[@id='root']/div[1]/div/div/div/div[1]/div[1]/div[15]/div/ul/li[1]/button")[0].click()
-        elif Second_option:
-            driver.find_elements_by_xpath(
-                "//*[@id='root']/div[1]/div/div/div/div[1]/div[1]/div[15]/div/ul/li[2]/button")[0].click()
-        elif Third_option:
-            driver.find_elements_by_xpath(
-                "//*[@id='root']/div[1]/div/div/div/div[1]/div[1]/div[15]/div/ul/li[3]/button")[0].click()
-    except (NoSuchElementException, StaleElementReferenceException, TimeoutException):
-        pass
+    three_options_click('coffee', "//*[@id='root']/div[1]/div/div/div/div[1]/div[1]/div[15]/div/ul/li[", ']/div/div/span[6]')
 
     # Continue
     click_continue(driver, delay)
@@ -663,28 +654,7 @@ def story_good_morning():
     click_continue(driver, delay)
 
     # What does 'was' mean?
-    try:
-        myElem = WebDriverWait(driver, delay).until(EC.element_to_be_clickable(
-            (By.XPATH, '/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[25]/div/ul/li[3]/button')))
-
-        First_option = driver.find_element_by_xpath(
-            "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[25]/div/ul/li[1]/div/div/span[1]")
-        Second_option = driver.find_element_by_xpath(
-            "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[25]/div/ul/li[2]/div/div/span[1]")
-        Third_option = driver.find_element_by_xpath(
-            "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[25]/div/ul/li[3]/div/div/span[1]")
-
-        if First_option.text == "What":
-            driver.find_elements_by_xpath(
-                "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[25]/div/ul/li[1]/button")[0].click()
-        elif Second_option.text == "What":
-            driver.find_elements_by_xpath(
-                "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[25]/div/ul/li[2]/button")[0].click()
-        elif Third_option.text == "What":
-            driver.find_elements_by_xpath(
-                "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[25]/div/ul/li[3]/button")[0].click()
-    except (NoSuchElementException, StaleElementReferenceException, TimeoutException):
-        pass
+    three_options_click("What", '/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[25]/div/ul/li[', ']/div/div/span[1]'k)
 
     # Continue
     click_continue(driver, delay)
@@ -708,25 +678,7 @@ def story_good_morning():
     except (NoSuchElementException, StaleElementReferenceException, TimeoutException):
         pass
     # Anna was so tired that?
-    try:
-        First_option = driver.find_element_by_xpath(
-            "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[29]/div/ul/li[1]/div/div/span[6]")
-        Second_option = driver.find_element_by_xpath(
-            "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[29]/div/ul/li[2]/div/div/span[6]")
-        Third_option = driver.find_element_by_xpath(
-            "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[29]/div/ul/li[3]/div/div/span[6]")
-
-        if First_option.text == "salt":
-            driver.find_elements_by_xpath(
-                "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[29]/div/ul/li[1]/button")[0].click()
-        elif Second_option.text == "salt":
-            driver.find_elements_by_xpath(
-                "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[29]/div/ul/li[2]/button")[0].click()
-        elif Third_option.text == "salt":
-            driver.find_elements_by_xpath(
-                "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[29]/div/ul/li[3]/button")[0].click()
-    except (NoSuchElementException, StaleElementReferenceException, TimeoutException):
-        pass
+    three_options_click("salt", '/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[29]/div/ul/li[', ']/div/div/span[6]')
 
     # Continue
     click_continue(driver, delay)
