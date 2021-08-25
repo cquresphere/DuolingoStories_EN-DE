@@ -482,37 +482,41 @@ except TimeoutException:
 time.sleep(2)
 
 @performance
-def story_good_morning():
+def story_good_morning(mode='listen'):
     global driver
     global delay
     # Load and start Story
     # Load Good Morning! story
-    load_story(driver, delay,
-            "https://www.duolingo.com/stories/de-guten-morgen", "Guten Morgen")
+    if mode == 'listen':
+        load_story(driver, delay, "https://www.duolingo.com/stories/de-guten-morgen?mode=listen", "Guten Morgen listen mode")
+    elif mode == 'read':
+        load_story(driver, delay, "https://www.duolingo.com/stories/de-guten-morgen?mode=read", "Guten Morgen read mode")
 
     # Continue
     click_continue(driver, delay)
 
     # Rainer und Anna sind zu Hause
-    clicktext('/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[4]/div/div/', 'Frau', 'Anna', 'sind', 'zu', 'Hause')
+    if mode == 'listen':
+        clicktext('/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[4]/div/div/', 'Frau', 'Anna', 'sind', 'zu', 'Hause')
 
     click_continue(driver, delay)
 
     # Rainer is at home with his wife
-    try:
-        First_option = driver.find_elements_by_xpath(
-            "/html/body/div[1]/div[1]/div/div/div/div[1]/div[1]/div[3]/div/ul/li[1]/div/div/span[1][@class='_2igzU _3LUrt _2P5W7'][contains(text(),'Yes')]")
-        Second_option = driver.find_elements_by_xpath(
-            "/html/body/div[1]/div[1]/div/div/div/div[1]/div[1]/div[3]/div/ul/li[2]/div/div/span[1][@class='_2igzU _3LUrt _2P5W7'][contains(text(),'Yes')]")
+    if mode == 'read': 
+        try:
+            First_option = driver.find_elements_by_xpath(
+                "/html/body/div[1]/div[1]/div/div/div/div[1]/div[1]/div[3]/div/ul/li[1]/div/div/span[1][@class='_2igzU _3LUrt _2P5W7'][contains(text(),'Yes')]")
+            Second_option = driver.find_elements_by_xpath(
+                "/html/body/div[1]/div[1]/div/div/div/div[1]/div[1]/div[3]/div/ul/li[2]/div/div/span[1][@class='_2igzU _3LUrt _2P5W7'][contains(text(),'Yes')]")
 
-        if First_option:
-            driver.find_elements_by_xpath(
-                "//*[@id='root']/div[1]/div/div/div/div[1]/div[1]/div[3]/div/ul/li[1]/button")[0].click()
-        elif Second_option:
-            driver.find_elements_by_xpath(
-                "//*[@id='root']/div[1]/div/div/div/div[1]/div[1]/div[3]/div/ul/li[2]/button")[0].click()
-    except (NoSuchElementException, StaleElementReferenceException, TimeoutException):
-        pass
+            if First_option:
+                driver.find_elements_by_xpath(
+                    "//*[@id='root']/div[1]/div/div/div/div[1]/div[1]/div[3]/div/ul/li[1]/button")[0].click()
+            elif Second_option:
+                driver.find_elements_by_xpath(
+                    "//*[@id='root']/div[1]/div/div/div/div[1]/div[1]/div[3]/div/ul/li[2]/button")[0].click()
+        except (NoSuchElementException, StaleElementReferenceException, TimeoutException):
+            pass
 
     # Continue
     click_continue(driver, delay)
@@ -524,12 +528,14 @@ def story_good_morning():
     click_continue(driver, delay)
 
     # Wo ist mein Englischbuch?
-    clicktext('/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[9]/div/div/', 'Wo', 'ist', 'mein', 'Englischbuch')
+    if mode == 'listen':
+        clicktext('/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[9]/div/div/', 'Wo', 'ist', 'mein', 'Englischbuch')
 
     click_continue(driver, delay)
 
-    # anna wants to know
-    two_options_click("//*[@id='root']/div[1]/div/div/div/div[1]/div[1]/div[7]/div/ul/li[", 'where', ']/div/div/*')
+    # Anna wants to know
+    if mode == 'read':
+        three_options_click('where', "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[7]/div/ul/li[", ']/div/div/span[2]')
     
     # Continue
     click_continue(driver, delay)
@@ -553,11 +559,13 @@ def story_good_morning():
     click_continue(driver, delay)
 
     # Mochtest du eine Kaffee
-    clicktext('/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[18]/div/div/', 'Möchtest', 'du', 'einen', 'Kaffee')
+    if mode == 'listen':
+        clicktext('/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[18]/div/div/', 'Möchtest', 'du', 'einen', 'Kaffee')
 
     click_continue(driver, delay)
 
-    three_options_click('coffee', "//*[@id='root']/div[1]/div/div/div/div[1]/div[1]/div[15]/div/ul/li[", ']/div/div/span[6]')
+    if mode == 'read':
+        three_options_click('coffee', "//*[@id='root']/div/div/div/div/div[1]/div[1]/div[15]/div/ul/li[", ']/div/div/span[6]')
 
     # Continue
     click_continue(driver, delay)
@@ -575,68 +583,70 @@ def story_good_morning():
     click_continue(driver, delay)
 
     # Anna gibt Zucker in den Kaffee
-    clicktext('/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[25]/div/div/', 'in', 'den', 'Kaffee')
+    if mode == 'listen':
+        clicktext('/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[25]/div/div/', 'in', 'den', 'Kaffee')
 
     click_continue(driver, delay)
 
     # What is Anna doing?
-    try:
-        myElem = WebDriverWait(driver, delay).until(EC.element_to_be_clickable(
-            (By.XPATH, '/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[21]/div/ul/li[3]/button')))
-    except (NoSuchElementException, StaleElementReferenceException, TimeoutException):
-        pass
+    if mode == 'read':
+        try:
+            myElem = WebDriverWait(driver, delay).until(EC.element_to_be_clickable(
+                (By.XPATH, '/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[21]/div/ul/li[3]/button')))
+        except (NoSuchElementException, StaleElementReferenceException, TimeoutException):
+            pass
 
-    try:
-        First_option = driver.find_element_by_xpath(
-            "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[21]/div/ul/li[1]/div/div/span[13]")
-    except NoSuchElementException:
-        First_option = DuoObj(False, 1)
-        First_option.text = 'False'
+        try:
+            First_option = driver.find_element_by_xpath(
+                "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[21]/div/ul/li[1]/div/div/span[13]")
+        except NoSuchElementException:
+            First_option = DuoObj(False, 1)
+            First_option.text = 'False'
 
-    try:
-        Second_option = driver.find_element_by_xpath(
-            "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[21]/div/ul/li[2]/div/div/span[13]")
-    except NoSuchElementException:
-        Second_option = DuoObj(False, 2)
-        Second_option.text = 'False'
+        try:
+            Second_option = driver.find_element_by_xpath(
+                "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[21]/div/ul/li[2]/div/div/span[13]")
+        except NoSuchElementException:
+            Second_option = DuoObj(False, 2)
+            Second_option.text = 'False'
 
-    try:
-        Third_option = driver.find_element_by_xpath(
-            "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[21]/div/ul/li[3]/div/div/span[13]")
-    except NoSuchElementException:
-        Third_option = DuoObj(False, 3)
-        Third_option.text = 'False'
+        try:
+            Third_option = driver.find_element_by_xpath(
+                "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[21]/div/ul/li[3]/div/div/span[13]")
+        except NoSuchElementException:
+            Third_option = DuoObj(False, 3)
+            Third_option.text = 'False'
 
-    try:
-        First_option2 = driver.find_element_by_xpath(
-            "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[21]/div/ul/li[1]/div/div/span[5]")
-    except NoSuchElementException:
-        First_option2 = DuoObj(False, 1)
-        First_option2.text = 'False'
+        try:
+            First_option2 = driver.find_element_by_xpath(
+                "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[21]/div/ul/li[1]/div/div/span[5]")
+        except NoSuchElementException:
+            First_option2 = DuoObj(False, 1)
+            First_option2.text = 'False'
 
-    try:
-        Second_option2 = driver.find_element_by_xpath(
-            "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[21]/div/ul/li[2]/div/div/span[5]")
-    except NoSuchElementException:
-        Second_option2 = DuoObj(False, 2)
-        Second_option2.text = 'False'
+        try:
+            Second_option2 = driver.find_element_by_xpath(
+                "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[21]/div/ul/li[2]/div/div/span[5]")
+        except NoSuchElementException:
+            Second_option2 = DuoObj(False, 2)
+            Second_option2.text = 'False'
 
-    try:
-        Third_option2 = driver.find_element_by_xpath(
-            "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[21]/div/ul/li[3]/div/div/span[5]")
-    except NoSuchElementException:
-        Third_option2 = DuoObj(False, 3)
-        Third_option2.text = 'False'
+        try:
+            Third_option2 = driver.find_element_by_xpath(
+                "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[21]/div/ul/li[3]/div/div/span[5]")
+        except NoSuchElementException:
+            Third_option2 = DuoObj(False, 3)
+            Third_option2.text = 'False'
 
-    if (First_option.text == "coffee" and First_option2.text == "putting"):
-        driver.find_elements_by_xpath(
-            "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[21]/div/ul/li[1]/button")[0].click()
-    elif (Second_option.text == "coffee" and Second_option2.text == "putting"):
-        driver.find_elements_by_xpath(
-            "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[21]/div/ul/li[2]/button")[0].click()
-    elif (Third_option.text == "coffee" and Third_option2.text == "putting"):
-        driver.find_elements_by_xpath(
-            "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[21]/div/ul/li[3]/button")[0].click()
+        if (First_option.text == "coffee" and First_option2.text == "putting"):
+            driver.find_elements_by_xpath(
+                "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[21]/div/ul/li[1]/button")[0].click()
+        elif (Second_option.text == "coffee" and Second_option2.text == "putting"):
+            driver.find_elements_by_xpath(
+                "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[21]/div/ul/li[2]/button")[0].click()
+        elif (Third_option.text == "coffee" and Third_option2.text == "putting"):
+            driver.find_elements_by_xpath(
+                "/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[21]/div/ul/li[3]/button")[0].click()
 
     # Continue
     click_continue(driver, delay)
@@ -654,7 +664,9 @@ def story_good_morning():
     click_continue(driver, delay)
 
     # What does 'was' mean?
-    three_options_click("What", '/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[25]/div/ul/li[', ']/div/div/span[1]'k)
+    if mode == 'read':
+        three_options_click("What", '/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[25]/div/ul/li[', ']/div/div/span[1]')
+
 
     # Continue
     click_continue(driver, delay)
@@ -668,22 +680,27 @@ def story_good_morning():
 
 
     # Du brauchst viel Kaffee
-    clicktext('/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[33]/div/div/', 'Du', 'brauchst', 'viel', 'Kaffee')
+    if mode == 'listen':
+        clicktext('/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[33]/div/div/', 'Du', 'brauchst', 'viel', 'Kaffee')
 
     click_continue(driver, delay)
 
-    try:
-        myElem = WebDriverWait(driver, delay).until(EC.element_to_be_clickable(
-            (By.XPATH, '/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[29]/div/ul/li[3]/button')))
-    except (NoSuchElementException, StaleElementReferenceException, TimeoutException):
-        pass
-    # Anna was so tired that?
-    three_options_click("salt", '/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[29]/div/ul/li[', ']/div/div/span[6]')
+    if mode == 'read':
+        three_options_click("salt", '/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[29]/div/ul/li[', ']/div/div/span[6]')
+
 
     # Continue
     click_continue(driver, delay)
     time.sleep(1)
+    if mode == 'listen':
+        matchpairs(>>>>Path to json dictionary with correct pairs <<<<, '/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[34]/div/ul/li[', >>>>Path to xlsx file collector for all occuring words to manually pair them correctly for dictionary<<<<)
+    elif mode == 'read':
+        matchpairs(>>>>Path to json dictionary with correct pairs <<<<, '/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[30]/div/ul/li[', >>>>Path to xlsx file collector for all occuring words to manually pair them correctly for dictionary<<<<)
+
 
     matchpairs(>>>>Path to json dictionary with correct pairs <<<<, '/html/body/div[1]/div/div/div/div/div[1]/div[1]/div[34]/div/ul/li[', >>>>Path to xlsx file collector for all occuring words to manually pair them correctly for dictionary<<<<)
 
-story_good_morning()
+#call story function in listen mode
+story_good_morning('listen')
+#call story function in read mode
+story_good_morning('read')
